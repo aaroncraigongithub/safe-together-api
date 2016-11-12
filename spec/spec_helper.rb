@@ -8,6 +8,10 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.before(:each) do
+    Sidekiq::Worker.clear_all
+  end
+
   config.disable_monkey_patching!
   config.example_status_persistence_file_path = 'spec/examples.txt'
   config.order = :random

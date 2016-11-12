@@ -1,8 +1,8 @@
 # frozen_string_literal:true
 require 'pusher'
 
-Pusher.app_id = '269408'
-Pusher.key = '28ef69c431acf8093b79'
-Pusher.secret = 'afd5f78fea0068a353c6'
+Pusher.app_id = ENV['PUSHER_APP_ID']
+Pusher.key = ENV['PUSHER_KEY']
+Pusher.secret = ENV['PUSHER_SECRET']
 Pusher.logger = Rails.logger
 Pusher.encrypted = true
