@@ -3,21 +3,33 @@ require 'rails_helper'
 
 RSpec.describe V1::AlertsController, type: :controller do
   describe 'POST /alerts' do
-    before do
-      process :create, method: :post
+    it_behaves_like 'an authenticated endpoint', :create, :post
+
+    context 'given a confirmed user' do
+      include_context 'an authenticated user', :user_with_friends
+
+      before do
+        expect(AlertManager).to receive(:create)
+          .with(current_user.id)
+
+        process :create, method: :post
+      end
+
+      it_behaves_like 'a 200 response'
     end
-  end
 
-  describe 'PUT /alerts' do
+    context 'given an unconfirmed user' do
+      include_context 'an authenticated user', :user_with_friends
 
+      before do
+        expect(AlertManager).to receive(:create)
+          .with(current_user.id)
+          .and_raise(AlertManager::ConfirmedUserRequired)
 
-  end
+        process :create, method: :post
+      end
 
-  describe 'DELETE /alerts' do
-
-  end
-
-  describe 'GET /alerts' do
-
+      it_behaves_like 'a 422 response'
+    end
   end
 end

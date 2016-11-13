@@ -1,6 +1,15 @@
 # frozen_string_literal: true
-RSpec.shared_context 'an authenticated user' do
-  let(:current_user) { create(:authed_user) }
+RSpec.shared_context 'an authenticated user' do |f = :authed_user|
+  let(:current_user) do
+    u = create(f)
+
+    if u.token.nil?
+      u.token = SecureRandom.hex
+      u.save!
+    end
+
+    u
+  end
 
   before do
     request.env['HTTP_AUTHORIZATION'] = current_user.token

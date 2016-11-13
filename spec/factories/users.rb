@@ -9,10 +9,22 @@ FactoryGirl.define do
 
     factory :confirmed_user do
       confirmed_at { Time.zone.now - 1.day }
-    end
 
-    factory :authed_user do
-      token { SecureRandom.hex }
+      factory :authed_user do
+        token { SecureRandom.hex }
+      end
+
+      factory :user_with_friends do
+        after(:create) do |u, _e|
+          create(:friend, user: u)
+        end
+
+        factory :user_with_alert do
+          after(:create) do |u, _e|
+            create(:alert, user: u)
+          end
+        end
+      end
     end
   end
 end

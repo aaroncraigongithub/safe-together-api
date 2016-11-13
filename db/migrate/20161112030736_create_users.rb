@@ -7,12 +7,14 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.string :confirmed_at
       t.string :confirm_token
       t.string :token
+      t.string :uuid
 
       t.timestamps
     end
 
     add_index :users, :email, unique: true
     add_index :users, :token, unique: true
+    add_index :users, :uuid, unique: true
     add_index :users, :confirm_token, unique: true
   end
 end

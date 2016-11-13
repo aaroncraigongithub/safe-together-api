@@ -17,6 +17,10 @@ module ApplicationErrors
       render_422 e
     end
 
+    rescue_from AlertManager::ConfirmedUserRequired do |e|
+      render_422 e
+    end
+
     rescue_from PG::UniqueViolation do |e|
       render_422 e
     end
