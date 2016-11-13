@@ -72,44 +72,4 @@ RSpec.describe UserManager do
       end
     end
   end
-
-  describe '#invite_friends' do
-    let(:emails) { [Faker::Internet.email] }
-    let(:user)   { create(:confirmed_user) }
-
-    context 'a confirmed user' do
-      before do
-        described_class.invite_friends user.id, emails
-      end
-
-      it 'queues the email worker' do
-        expect(InviteFriendMailWorker.jobs.size).to eq 1
-      end
-
-      it 'queues the right params' do
-        expect(InviteFriendMailWorker.jobs.first['args'])
-          .to eq [user.id, emails.first]
-      end
-    end
-
-    context 'an unconfirmed user' do
-      let(:user) { create(:user) }
-
-      it 'raises a UserManager::ConfirmedUserRequired error' do
-        expect {
-          described_class.invite_friends user.id, emails
-        }.to raise_error(UserManager::ConfirmedUserRequired)
-      end
-    end
-
-    context 'more than 20 emails' do
-      let(:emails) { Array.new 21, Faker::Internet.email }
-
-      it 'raises a UserManager::EmailLimitReached error' do
-        expect {
-          described_class.invite_friends user.id, emails
-        }.to raise_error(UserManager::EmailLimitReached)
-      end
-    end
-  end
 end

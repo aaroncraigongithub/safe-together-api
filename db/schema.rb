@@ -18,10 +18,12 @@ ActiveRecord::Schema.define(version: 20161112062904) do
   create_table "friends", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
+    t.string   "invite_token"
     t.datetime "confirmed_at"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.index ["friend_id"], name: "index_friends_on_friend_id", using: :btree
+    t.index ["invite_token"], name: "index_friends_on_invite_token", unique: true, using: :btree
     t.index ["user_id"], name: "index_friends_on_user_id", using: :btree
   end
 
@@ -34,6 +36,7 @@ ActiveRecord::Schema.define(version: 20161112062904) do
     t.string   "token"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["confirm_token"], name: "index_users_on_confirm_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["token"], name: "index_users_on_token", unique: true, using: :btree
   end

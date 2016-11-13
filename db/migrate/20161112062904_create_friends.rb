@@ -3,9 +3,12 @@ class CreateFriends < ActiveRecord::Migration[5.0]
     create_table :friends do |t|
       t.references :user, foreign_key: true
       t.references :friend, foreign_key: { to_table: :users }
-      t.datetime :confirmed_at
+      t.string     :invite_token
+      t.datetime   :confirmed_at
 
       t.timestamps
     end
+
+    add_index :friends, :invite_token, unique: true
   end
 end

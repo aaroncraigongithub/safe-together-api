@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @friend.user.name %> wants to add you on Stronger Together</h1>
+    <p>
+      To add this person, please follow this link: https://stronger-together.herokuapp.com/v1/friends/confirm/<%= @friend.invite_token %>.
+    </p>
+    <p>Thanks, and have a great day!</p>
+  </body>
+</html>

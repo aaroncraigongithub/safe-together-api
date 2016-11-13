@@ -29,7 +29,7 @@ RSpec.describe V1::UsersController do
     end
   end
 
-  describe 'GET /users/confirm/:token' do
+  describe 'PUT /users/confirm/:token' do
     let(:token) { SecureRandom.hex }
     let(:error) { nil }
 
@@ -44,7 +44,7 @@ RSpec.describe V1::UsersController do
           .and_return(true)
       end
 
-      process :confirm, method: :get, params: { token: token }
+      process :confirm, method: :put, params: { token: token }
     end
 
     context 'given a valid token' do

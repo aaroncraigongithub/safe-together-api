@@ -10,7 +10,7 @@ RSpec.describe V1::FriendsController do
       let(:user_ids) { [rand(1..1000).to_s] }
 
       before do
-        expect(UserManager).to receive(:add_friends)
+        expect(FriendManager).to receive(:add)
           .with(current_user.id, user_ids)
 
         process :add, method: :post, params: { user_ids: user_ids }
@@ -28,10 +28,28 @@ RSpec.describe V1::FriendsController do
       let(:emails) { [Faker::Internet.email] }
 
       before do
-        expect(UserManager).to receive(:invite_friends)
+        expect(FriendManager).to receive(:invite)
           .with(current_user.id, emails)
 
         process :invite, method: :post, params: { emails: emails }
+      end
+
+      it_behaves_like 'a 200 response'
+    end
+  end
+
+  describe 'PUT /friends/confirm/:token' do
+    it_behaves_like 'an authenticated endpoint', :confirm, :put, token: 1
+
+    context 'given a known token' do
+      include_context 'an authenticated user'
+      let(:token) { SecureRandom.hex }
+
+      before do
+        expect(FriendManager).to receive(:confirm)
+          .with(token)
+
+        process :confirm, method: :put, params: { token: token }
       end
 
       it_behaves_like 'a 200 response'
