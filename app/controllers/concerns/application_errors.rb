@@ -4,6 +4,7 @@ module ApplicationErrors
 
   class AuthenticationRequired < StandardError; end
 
+  # rubocop: disable Metrics/BlockLength
   included do
     rescue_from AuthenticationRequired do |e|
       render_403 e
@@ -11,6 +12,10 @@ module ApplicationErrors
 
     rescue_from ActiveRecord::RecordNotFound do |e|
       render_404 e
+    end
+
+    rescue_from SessionManager::InvalidLogin do |e|
+      render_422 e
     end
 
     rescue_from UserManager::TokenAlreadyUsed do |e|
@@ -37,4 +42,5 @@ module ApplicationErrors
       render_422 e
     end
   end
+  # rubocop: enable Metrics/BlockLength
 end

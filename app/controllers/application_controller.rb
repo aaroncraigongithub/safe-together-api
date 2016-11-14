@@ -9,9 +9,12 @@ class ApplicationController < ActionController::API
   end
 
   def auth_required?
-    return true unless params[:controller] == 'v1/users'
+    return false if params[:controller] == 'v1/users' &&
+                    %w(create confirm).include?(params[:action])
+    return false if params[:controller] == 'v1/sessions' &&
+                    params[:action] == 'create'
 
-    %i(create confirm).include?(params[:action])
+    true
   end
 
   def current_user
