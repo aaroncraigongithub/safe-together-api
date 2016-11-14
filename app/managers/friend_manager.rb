@@ -43,9 +43,6 @@ class FriendManager
 
   def self.create_friend(user, email)
     friend_user = User.create! email: email, password: SecureRandom.hex(6)
-    friend_user.confirm_token = UserManager.generate_token
-    friend_user.save!
-
     Friend.create! user: user, friend_id: friend_user.id
   end
 end

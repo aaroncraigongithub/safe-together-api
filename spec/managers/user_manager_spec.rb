@@ -11,7 +11,7 @@ RSpec.describe UserManager do
       before do
         expect(
           described_class.create(email: email, password: password)
-        ).to eq user.confirm_token
+        ).to eq user.token
       end
 
       it 'creates the user' do
@@ -19,7 +19,7 @@ RSpec.describe UserManager do
       end
 
       it 'stores the token' do
-        expect(user.confirm_token).not_to be nil
+        expect(user.token).not_to be nil
       end
 
       it 'queues a mail worker' do
