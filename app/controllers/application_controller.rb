@@ -26,13 +26,13 @@ class ApplicationController < ActionController::API
   end
 
   [200, 201].each do |status|
-    define_method "render_#{status}" do |json = { meta: {} }|
-      render_ok json, status
+    define_method "render_#{status}" do |json = { meta: {} }, opts = {}|
+      render_ok json, status, opts
     end
   end
 
-  def render_ok(json = { meta: {} }, status = 200)
-    render_json json, status
+  def render_ok(json = { meta: {} }, status = 200, opts = {})
+    render_json json, status, opts
   end
 
   [400, 401, 403, 404, 412, 422, 423, 424, 502].each do |status|
@@ -52,7 +52,7 @@ class ApplicationController < ActionController::API
     render_json({ errors: [payload] }, status)
   end
 
-  def render_json(json, status)
-    render(json: json, status: status)
+  def render_json(json, status, opts = {})
+    render opts.merge(json: json, status: status)
   end
 end

@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class V1::FriendsController < ApplicationController
+  def show
+    render_200 current_user.friends, include: %w(user friend)
+  end
+
   def add
     FriendManager.add current_user.id, params[:user_ids]
 

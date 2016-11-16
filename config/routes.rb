@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     post '/users',                to: 'users#create'
     put  '/users/confirm/:token', to: 'users#confirm'
 
+    get  '/friends',                to: 'friends#show'
     post '/friends/add',            to: 'friends#add'
     post '/friends/invite',         to: 'friends#invite'
     put  '/friends/confirm/:token', to: 'friends#confirm'

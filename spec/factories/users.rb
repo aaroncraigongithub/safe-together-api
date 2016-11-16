@@ -16,7 +16,7 @@ FactoryGirl.define do
 
       factory :user_with_friends do
         after(:create) do |u, _e|
-          create(:friend, user: u)
+          create(:confirmed_friend, user: u)
         end
 
         factory :user_with_alert do

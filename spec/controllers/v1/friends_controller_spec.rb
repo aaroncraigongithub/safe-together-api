@@ -55,4 +55,24 @@ RSpec.describe V1::FriendsController do
       it_behaves_like 'a 200 response'
     end
   end
+
+  describe 'GET /friends' do
+    it_behaves_like 'an authenticated endpoint', :show, :get
+
+    context 'given a user with friends' do
+      include_context 'an authenticated user', :user_with_friends
+      include_context 'a JSON payload'
+
+      before do
+        process :show, method: :get
+      end
+
+      it_behaves_like 'a 200 response'
+
+      it 'returns the list of friends' do
+        expect(payload['data'].first['id'])
+          .to eq current_user.friends.first.uuid
+      end
+    end
+  end
 end

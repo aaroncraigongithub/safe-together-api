@@ -8,5 +8,5 @@
 end
 
 RSpec.shared_context 'a JSON payload' do
-  let(:payload) { JSON.parse(response.body).with_indifferent_access }
+  let(:payload) { JSON.parse(response.body) }
 end
