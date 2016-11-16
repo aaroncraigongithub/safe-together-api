@@ -25,7 +25,7 @@ RSpec.describe V1::UsersController do
     it_behaves_like 'a 200 response'
 
     it 'returns the user auth token' do
-      expect(payload[:token]).to eq token
+      expect(payload['token']).to eq token
     end
   end
 

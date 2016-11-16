@@ -5,14 +5,18 @@ class ApplicationController < ActionController::API
   before_action :authenticate_user!
 
   def authenticate_user!
-    raise AuthenticationRequired if auth_required? && current_user.nil?
+    raise AuthenticationRequired if auth_required? &&
+                                    (
+                                      auth_token.blank? ||
+                                      current_user.nil?
+                                    )
   end
 
   def auth_required?
     return false if params[:controller] == 'v1/users' &&
-                    %w(create confirm).include?(params[:action])
+                    %w(create confirm).include?(params[:action].to_s)
     return false if params[:controller] == 'v1/sessions' &&
-                    params[:action] == 'create'
+                    params[:action].to_s == 'create'
 
     true
   end
@@ -22,7 +26,14 @@ class ApplicationController < ActionController::API
   end
 
   def auth_token
-    request.headers['HTTP_AUTHORIZATION']
+    auth_header = request.headers['HTTP_AUTHORIZATION']
+
+    return nil if auth_header.blank?
+
+    auth = auth_header.split(' ')
+    return nil unless auth.first == 'Bearer' && auth.count == 2
+
+    auth.last
   end
 
   [200, 201].each do |status|

@@ -12,7 +12,7 @@ RSpec.shared_context 'an authenticated user' do |f = :authed_user|
   end
 
   before do
-    request.env['HTTP_AUTHORIZATION'] = current_user.token
+    request.env['HTTP_AUTHORIZATION'] = "Bearer #{current_user.token}"
   end
 end
 
