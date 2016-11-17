@@ -4,16 +4,9 @@ class V1::FriendsController < ApplicationController
     render_200 current_user.friends, include: %w(user friend)
   end
 
-  def add
-    FriendManager.add current_user.id, params[:user_ids]
-
-    render_200
-  end
-
   def invite
-    FriendManager.invite current_user.id, params[:emails]
-
-    render_200
+    friends = FriendManager.invite current_user.id, params[:emails]
+    render_200 friends, include: %w(user friend)
   end
 
   def confirm

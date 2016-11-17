@@ -24,49 +24,15 @@ RSpec.describe FriendManager do
     end
   end
 
-  describe '#add' do
-    let(:user_ids) { [create(:confirmed_user).id] }
-    let(:user)     { create(:confirmed_user) }
-    let(:friend)   { Friend.find_by friend_id: user_ids.first }
-
-    context 'given a confirmed user' do
-      before do
-        described_class.add user.id, user_ids
-      end
-
-      it 'queues the email worker' do
-        expect(AddFriendMailWorker.jobs.size).to eq 1
-      end
-
-      it 'queues the right params' do
-        expect(AddFriendMailWorker.jobs.first['args'])
-          .to eq [friend.id]
-      end
-
-      it 'creates the Friend record' do
-        expect(friend).not_to be nil
-      end
-    end
-
-    context 'given an unconfirmed user' do
-      let(:user) { create(:user) }
-
-      it 'raises a FriendManager::ConfirmedUserRequired error' do
-        expect {
-          described_class.invite user.id, user_ids
-        }.to raise_error(FriendManager::ConfirmedUserRequired)
-      end
-    end
-  end
-
   describe '#invite' do
-    let(:emails) { [Faker::Internet.email] }
-    let(:user)   { create(:confirmed_user) }
-    let(:friend) { Friend.find_by user_id: user.id }
+    let(:emails)     { [Faker::Internet.email] }
+    let(:user)       { create(:confirmed_user) }
+    let(:friend)     { Friend.find_by user_id: user.id }
+    let(:new_friend) { described_class.invite(user.id, emails).first }
 
     context 'given a confirmed user' do
       before do
-        described_class.invite user.id, emails
+        expect(new_friend).to be_a_kind_of(Friend)
       end
 
       it 'queues the email worker' do
