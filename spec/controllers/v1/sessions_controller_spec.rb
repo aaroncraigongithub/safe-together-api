@@ -5,9 +5,10 @@ RSpec.describe V1::SessionsController do
   describe 'POST /sessions' do
     include_context 'a JSON payload'
 
-    let(:email)     { Faker::Internet.email }
-    let(:password)  { Faker::Lorem.characters(10) }
-    let(:token)     { SecureRandom.hex }
+    let(:user)      { create(:authed_user) }
+    let(:email)     { user.email }
+    let(:password)  { user.password }
+    let(:token)     { user.token }
 
     before do
       if defined? error
@@ -17,8 +18,9 @@ RSpec.describe V1::SessionsController do
       else
         expect(SessionManager).to receive(:create)
           .with(email, password)
-          .and_return(token)
+          .and_return(user)
       end
+
       process :create, method: :post, params: {
         email:    email,
         password: password
@@ -28,8 +30,12 @@ RSpec.describe V1::SessionsController do
     context 'given a correct username/password' do
       it_behaves_like 'a 200 response'
 
-      it 'returns the session token' do
-        expect(payload['token']).to eq token
+      it 'returns the user object' do
+        expect(payload['data']['id']).to eq user.uuid
+      end
+
+      it 'returns the access token' do
+        expect(payload['data']['attributes']['token']).to eq token
       end
     end
 

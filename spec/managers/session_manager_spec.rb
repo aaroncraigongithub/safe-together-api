@@ -11,8 +11,8 @@ RSpec.describe SessionManager do
       let(:email) { user.email }
       let(:user)  { create(:user, password: password) }
 
-      it 'returns the user token' do
-        expect(create_session).to eq user.reload.token
+      it 'returns the user' do
+        expect(create_session.token).to eq user.reload.token
       end
 
       it 'creates the user token' do

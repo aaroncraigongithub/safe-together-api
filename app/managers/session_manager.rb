@@ -10,6 +10,6 @@ class SessionManager
     user.token = SecureRandom.hex
     user.save!
 
-    user.token
+    user
   end
 end
