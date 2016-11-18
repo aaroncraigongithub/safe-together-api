@@ -10,7 +10,7 @@ RSpec.describe UserManager do
     context 'given a new email' do
       before do
         expect(
-          described_class.create(email: email, password: password)
+          described_class.create(email: email, password: password).token
         ).to eq user.token
       end
 
@@ -44,7 +44,7 @@ RSpec.describe UserManager do
 
     context 'given a valid token' do
       before do
-        described_class.confirm token
+        expect(described_class.confirm(token).id).to eq user.id
       end
 
       it 'confirms the user' do

@@ -3,6 +3,7 @@ class UserSerializer < ActiveModel::Serializer
   attributes :id,
              :email,
              :name,
+             :token,
              :confirmed_at,
              :created_at,
              :updated_at

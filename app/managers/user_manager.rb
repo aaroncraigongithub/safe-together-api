@@ -11,7 +11,7 @@ class UserManager
 
     ConfirmUserMailWorker.perform_async user.id
 
-    user.token
+    user
   end
 
   def self.confirm(token)
@@ -22,5 +22,7 @@ class UserManager
 
     user.confirmed_at = Time.zone.now
     user.save!
+
+    user
   end
 end

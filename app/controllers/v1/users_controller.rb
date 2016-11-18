@@ -5,17 +5,17 @@ class V1::UsersController < ApplicationController
   end
 
   def create
-    token = UserManager.create(
+    user = UserManager.create(
       email:    params[:email],
       password: params[:password]
     )
 
-    render_200 token: token
+    render_200 user
   end
 
   def confirm
-    UserManager.confirm params[:token]
+    user = UserManager.confirm params[:token]
 
-    render_200
+    render_200 user
   end
 end

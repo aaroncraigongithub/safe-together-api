@@ -2,12 +2,13 @@
 require 'rails_helper'
 
 RSpec.describe V1::UsersController do
+  include_context 'a JSON payload'
+
   describe 'GET /users' do
     it_behaves_like 'an authenticated endpoint', :show, :get
 
     context 'an authenticated user' do
       include_context 'an authenticated user'
-      include_context 'a JSON payload'
 
       before do
         process :show, method: :get
@@ -22,11 +23,12 @@ RSpec.describe V1::UsersController do
   end
 
   describe 'POST /users' do
-    include_context 'a JSON payload'
-
     let(:email)    { Faker::Internet.email }
     let(:password) { Faker::Lorem.characters(10) }
     let(:token)    { SecureRandom.hex }
+    let(:user) do
+      create(:user, token: token, password: password, email: email)
+    end
 
     before do
       expect(UserManager).to receive(:create)
@@ -34,7 +36,7 @@ RSpec.describe V1::UsersController do
           email:    email,
           password: password
         )
-        .and_return(token)
+        .and_return(user)
 
       process :create, method: :post, params: {
         email: email, password: password
@@ -43,13 +45,18 @@ RSpec.describe V1::UsersController do
 
     it_behaves_like 'a 200 response'
 
+    it 'returns the user record' do
+      expect(payload['data']['id']).to eq user.uuid
+    end
+
     it 'returns the user auth token' do
-      expect(payload['token']).to eq token
+      expect(payload['data']['attributes']['token']).to eq user.token
     end
   end
 
   describe 'PUT /users/confirm/:token' do
-    let(:token) { SecureRandom.hex }
+    let(:user)  { create(:confirmed_user) }
+    let(:token) { user.confirm_token }
     let(:error) { nil }
 
     before do
@@ -60,7 +67,7 @@ RSpec.describe V1::UsersController do
       else
         expect(UserManager).to receive(:confirm)
           .with(token)
-          .and_return(true)
+          .and_return(user)
       end
 
       process :confirm, method: :put, params: { token: token }
@@ -68,6 +75,10 @@ RSpec.describe V1::UsersController do
 
     context 'given a valid token' do
       it_behaves_like 'a 200 response'
+
+      it 'returns the user object' do
+        expect(payload['data']['id']).to eq user.uuid
+      end
     end
 
     context 'given an invalid token' do
