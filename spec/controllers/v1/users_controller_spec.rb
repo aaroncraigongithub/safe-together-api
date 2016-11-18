@@ -2,6 +2,25 @@
 require 'rails_helper'
 
 RSpec.describe V1::UsersController do
+  describe 'GET /users' do
+    it_behaves_like 'an authenticated endpoint', :show, :get
+
+    context 'an authenticated user' do
+      include_context 'an authenticated user'
+      include_context 'a JSON payload'
+
+      before do
+        process :show, method: :get
+      end
+
+      it_behaves_like 'a 200 response'
+
+      it 'returns the user data' do
+        expect(payload['data']['id']).to eq current_user.uuid
+      end
+    end
+  end
+
   describe 'POST /users' do
     include_context 'a JSON payload'
 
