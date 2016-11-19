@@ -12,6 +12,6 @@ class Friend < ApplicationRecord
   def ensure_token
     return if invite_token.present?
 
-    self.invite_token = SecureRandom.hex
+    self.invite_token = SecureRandom.hex 32
   end
 end

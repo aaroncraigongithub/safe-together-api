@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
     get  '/friends',                to: 'friends#show'
     post '/friends/invite',         to: 'friends#invite'
-    put  '/friends/confirm/:token', to: 'friends#confirm'
+    put  '/friends/confirm',        to: 'friends#confirm'
 
     post '/alerts',                 to: 'alerts#create'
 
