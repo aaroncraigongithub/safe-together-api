@@ -3,7 +3,7 @@ class SessionManager
   class SessionManager::InvalidLogin < StandardError; end
 
   def self.create(email, password)
-    user = User.find_by email: email
+    user = User.where('LOWER(email) = ?', email.downcase).first
     raise SessionManager::InvalidLogin if user.nil?
     raise SessionManager::InvalidLogin unless user.authenticate(password)
 

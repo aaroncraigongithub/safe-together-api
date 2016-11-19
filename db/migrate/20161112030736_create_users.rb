@@ -12,9 +12,10 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.timestamps
     end
 
-    add_index :users, :email, unique: true
     add_index :users, :token, unique: true
     add_index :users, :uuid, unique: true
     add_index :users, :confirm_token, unique: true
-  end
+    execute "CREATE UNIQUE INDEX index_users_on_lowercase_email
+             ON users USING btree (lower(email));"
+    end
 end

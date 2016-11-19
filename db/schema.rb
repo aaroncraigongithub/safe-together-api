@@ -50,8 +50,8 @@ ActiveRecord::Schema.define(version: 20161113021855) do
     t.string   "uuid"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index "lower((email)::text)", name: "index_users_on_lowercase_email", unique: true, using: :btree
     t.index ["confirm_token"], name: "index_users_on_confirm_token", unique: true, using: :btree
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["token"], name: "index_users_on_token", unique: true, using: :btree
     t.index ["uuid"], name: "index_users_on_uuid", unique: true, using: :btree
   end
