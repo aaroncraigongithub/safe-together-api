@@ -14,6 +14,14 @@ class User < ApplicationRecord
     alerts.find_by deactivated_at: nil
   end
 
+  def all_friends
+    Friend.where('friend_id = ? OR user_id = ?', id, id)
+  end
+
+  def confirmed_friends
+    all_friends.where('confirmed_at IS NOT NULL')
+  end
+
   protected
 
   def ensure_name

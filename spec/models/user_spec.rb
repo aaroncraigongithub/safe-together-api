@@ -47,4 +47,58 @@ RSpec.describe User do
       end
     end
   end
+
+  describe '.confirmed_friends' do
+    context 'given some unconfirmed friends' do
+      let(:user) do
+        u = create(:confirmed_user)
+        create(:friend, user: u)
+
+        u
+      end
+
+      it 'returns 0' do
+        expect(user.confirmed_friends.count).to eq 0
+      end
+    end
+
+    context 'given some unconfirmed invitations' do
+      let(:user) do
+        u = create(:confirmed_user)
+        create(:friend, friend: u)
+
+        u
+      end
+
+      it 'returns 0' do
+        expect(user.confirmed_friends.count).to eq 0
+      end
+    end
+
+    context 'given confirmed friends' do
+      let(:user) do
+        u = create(:confirmed_user)
+        create(:confirmed_friend, user: u)
+
+        u
+      end
+
+      it 'returns 1' do
+        expect(user.confirmed_friends.count).to eq 1
+      end
+    end
+
+    context 'given confirmed invitations' do
+      let(:user) do
+        u = create(:confirmed_user)
+        create(:confirmed_friend, friend: u)
+
+        u
+      end
+
+      it 'returns 1' do
+        expect(user.confirmed_friends.count).to eq 1
+      end
+    end
+  end
 end

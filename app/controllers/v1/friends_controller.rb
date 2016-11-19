@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class V1::FriendsController < ApplicationController
   def show
-    render_200 current_user.friends, include: %w(user friend)
+    render_200 current_user.all_friends, include: %w(user friend)
   end
 
   def invite
