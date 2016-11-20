@@ -1,6 +1,6 @@
-# stronger-together-api
+# safe-together-api
 
-The server side code for the Strong Together app
+The server side code for the Safe Together app
 
 ## Contributing
 
