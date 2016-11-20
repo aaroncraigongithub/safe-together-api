@@ -11,12 +11,12 @@ default: &default
 
 development:
   <<: *default
-  database: stronger-together-dev
+  database: safe-together-dev
 
 test:
   <<: *default
-  database: stronger-together-test
+  database: safe-together-test
 
 production:
   <<: *default
-  database: stronger-together
+  database: safe-together
